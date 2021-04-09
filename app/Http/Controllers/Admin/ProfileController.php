@@ -6,12 +6,22 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use App\Profile;
-use App\History;
+use App\Record;
 use Carbon\Carbon;
 
 class ProfileController extends Controller
 {
-    //
+    public function index(Request $request)
+    {
+        $name = $request -> name;
+        if ($name != ''){
+            $posts = Profile::where('name', $name) -> get();
+        } else {
+            $posts = Profile::all();
+        }
+        return view('admin.profile.index', ['posts' => $posts, 'name' => $name]);
+    }
+    
     public function add()
     {
         return view('admin.profile.create');
@@ -57,10 +67,10 @@ class ProfileController extends Controller
         // 該当するデータを上書きして保存する
         $profile -> fill($profile_form) -> save();
         //
-        $history = new History;
-        $history->profile_id = $profile->id;
-        $history->edited_at = Carbon::now();
-        $history->save();
+        $record = new Record;
+        $record->profile_id = $profile->id;
+        $record->edited_at = Carbon::now();
+        $record->save();
         
         return redirect('admin/profile/');
     }
