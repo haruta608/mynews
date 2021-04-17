@@ -2,6 +2,7 @@
 
 @section('content')
     <div class = "container">
+        <p>profile</p>
         <hr color = "rgb(0 128 128)">
         @if (!is_null($headline))
             <div class = "row">
